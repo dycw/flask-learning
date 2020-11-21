@@ -1,4 +1,4 @@
-name: python-project-template
+name: flask-learning
 
 dependencies:
   - python = 3.8.*
