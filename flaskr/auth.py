@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import functools
+from functools import wraps
 from typing import Any
 from typing import Callable
 from typing import Union
@@ -108,7 +108,7 @@ def logout() -> Response:
 
 
 def login_required(view: Callable) -> Callable:
-    @functools.wraps(view)
+    @wraps(view)
     def wrapped_view(**kwargs: Any) -> Union[str, Response]:
         if g.user is None:
             return redirect(url_for("auth.login"))

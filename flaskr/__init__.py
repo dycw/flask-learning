@@ -8,7 +8,7 @@ from typing import Optional
 from flask import Flask
 
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 
 def create_app(test_config: Optional[Dict[str, Any]] = None) -> Flask:
