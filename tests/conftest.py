@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import tempfile
+from typing import Any
 from typing import Iterator
 
 from flask import Flask
@@ -47,3 +48,35 @@ def client(app: Flask) -> FlaskClient:
 @fixture  # type: ignore
 def runner(app: Flask) -> FlaskCliRunner:
     return app.test_cli_runner()
+
+
+class AuthActions:
+    def __init__(self: AuthActions, client: FlaskClient) -> None:
+        self._client = client
+
+    def login(  # noqa: S107
+        self: AuthActions,
+        username: str = "test",
+        password: str = "test",
+    ) -> Any:
+        out = self._client.post(
+            "/auth/login",
+            data={"username": username, "password": password},
+        )
+        raise TypeError(type(out))
+
+        return self._client.post(
+            "/auth/login",
+            data={"username": username, "password": password},
+        )
+
+    def logout(self: AuthActions) -> Any:
+        out = self._client.get("/auth/logout")
+        raise TypeError(type(out))
+
+        return self._client.get("/auth/logout")
+
+
+@fixture  # type: ignore
+def auth(client: FlaskClient) -> AuthActions:
+    return AuthActions(client)
