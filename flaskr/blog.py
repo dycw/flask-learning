@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from sqlite3.dbapi2 import Row
-from typing import Any
 from typing import Union
 
 from flask import Blueprint
@@ -22,19 +21,14 @@ bp = Blueprint("blog", __name__)
 
 
 @bp.route("/")
-def index() -> Any:
+def index() -> str:
     db = get_db()
     posts = db.execute(
         "SELECT p.id, title, body, created, author_id, username"
         " FROM post p JOIN user u ON p.author_id = u.id"
         " ORDER BY created DESC",
     ).fetchall()
-    if not isinstance(
-        out := render_template("blog/index.html", posts=posts),
-        str,
-    ):
-        raise TypeError(type(out))
-    return out
+    return render_template("blog/index.html", posts=posts)
 
 
 @bp.route("/create", methods=("GET", "POST"))
@@ -57,13 +51,9 @@ def create() -> Union[str, Response]:
                 (title, body, g.user["id"]),
             )
             db.commit()
-            if not isinstance(out := redirect(url_for("blog.index")), Response):
-                raise TypeError(type(out))
-            return out
+            return redirect(url_for("blog.index"))
 
-    if not isinstance(out2 := render_template("blog/create.html"), str):
-        raise TypeError(type(out2))
-    return out2
+    return render_template("blog/create.html")
 
 
 def get_post(id: int, check_author: bool = True) -> Row:  # noqa: A002

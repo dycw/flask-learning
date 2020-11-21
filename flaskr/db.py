@@ -45,8 +45,5 @@ def init_db_command() -> None:
 
 
 def init_app(app: Flask) -> None:
-    if not isinstance(app, Flask):
-        raise TypeError(app)
-
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
