@@ -5,7 +5,7 @@ from os import environ
 from flask import request
 from pytest import mark
 
-from flask_learning.official.v008__context_locals.hello import app
+from flask_learning.official.quickstart.v008__context_locals.hello import app
 
 
 def test_hello_1() -> None:
