@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import os
 import tempfile
-from typing import Any
 from typing import Iterator
 
 from flask import Flask
 from flask.testing import FlaskClient
+from flask.testing import FlaskCliRunner
 from pytest import fixture
 
 from flaskr import create_app
@@ -45,7 +45,5 @@ def client(app: Flask) -> FlaskClient:
 
 
 @fixture  # type: ignore
-def runner(app: Flask) -> Any:
-    if not isinstance(out := app.test_cli_runner(), str):
-        raise TypeError(type(out))
-    return out
+def runner(app: Flask) -> FlaskCliRunner:
+    return app.test_cli_runner()
