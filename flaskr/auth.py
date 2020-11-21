@@ -3,7 +3,6 @@ from __future__ import annotations
 import functools
 from typing import Any
 from typing import Callable
-from typing import TypeVar
 from typing import Union
 
 from flask import Blueprint
@@ -21,7 +20,6 @@ from werkzeug.security import generate_password_hash
 from flaskr.db import get_db
 
 
-T = TypeVar("T")
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 

@@ -6,6 +6,7 @@ from typing import Any
 from typing import Iterator
 
 from flask import Flask
+from flask import Response
 from flask.testing import FlaskClient
 from flask.testing import FlaskCliRunner
 from pytest import fixture
@@ -58,13 +59,7 @@ class AuthActions:
         self: AuthActions,
         username: str = "test",
         password: str = "test",
-    ) -> Any:
-        out = self._client.post(
-            "/auth/login",
-            data={"username": username, "password": password},
-        )
-        raise TypeError(type(out))
-
+    ) -> Response:
         return self._client.post(
             "/auth/login",
             data={"username": username, "password": password},
