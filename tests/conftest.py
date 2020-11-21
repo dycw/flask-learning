@@ -1,7 +1,10 @@
 from __future__ import annotations
 
-import os
-import tempfile
+from os import close
+from os import unlink
+from os.path import dirname
+from os.path import join
+from tempfile import mkstemp
 from typing import Iterator
 
 from flask import Flask
@@ -14,14 +17,13 @@ from flaskr import create_app
 from flaskr.db import get_db
 from flaskr.db import init_db
 
-
-with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
+with open(join(dirname(__file__), "data.sql"), "rb") as f:
     _data_sql = f.read().decode("utf8")
 
 
 @fixture  # type: ignore
 def app() -> Iterator[Flask]:
-    db_fd, db_path = tempfile.mkstemp()
+    db_fd, db_path = mkstemp()
 
     app = create_app(
         {
@@ -36,8 +38,8 @@ def app() -> Iterator[Flask]:
 
     yield app
 
-    os.close(db_fd)
-    os.unlink(db_path)
+    close(db_fd)
+    unlink(db_path)
 
 
 @fixture  # type: ignore
