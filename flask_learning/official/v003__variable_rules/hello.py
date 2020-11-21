@@ -12,11 +12,6 @@ def index() -> str:
     return "Index Page"
 
 
-@app.route("/hello")
-def hello() -> str:
-    return "Hello, World"
-
-
 @app.route("/user/<username>")
 def show_user_profile(username: str) -> str:
     if not isinstance(username, str):
