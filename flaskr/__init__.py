@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import os
+from typing import Any
+from typing import Dict
 from typing import Optional
 
 from flask import Flask
@@ -9,7 +11,7 @@ from flask import Flask
 __version__ = "0.0.2"
 
 
-def create_app(test_config: Optional[str] = None) -> Flask:
+def create_app(test_config: Optional[Dict[str, Any]] = None) -> Flask:
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(  # noqa: S106

@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import functools
 from typing import Any
+from typing import Callable
+from typing import TypeVar
 from typing import Union
 
 from flask import Blueprint
@@ -19,6 +21,7 @@ from werkzeug.security import generate_password_hash
 from flaskr.db import get_db
 
 
+T = TypeVar("T")
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
@@ -108,18 +111,16 @@ def logout() -> Any:
     return out
 
 
-def login_required(view: Any) -> Any:
+def login_required(view: Callable[..., str]) -> Callable[..., str]:
     @functools.wraps(view)
-    def wrapped_view(**kwargs: Any) -> Any:
+    def wrapped_view(**kwargs: Any) -> str:
         if g.user is None:
             if not isinstance(out := redirect(url_for("auth.login")), str):
                 raise TypeError(out)
             return out
 
-        if not isinstance(out := view(**kwargs), str):
-            raise TypeError(out)
-        return out
+        if not isinstance(out2 := view(**kwargs), str):
+            raise TypeError(type(out2))
+        return out2
 
-    if not isinstance(wrapped_view, str):
-        raise TypeError(wrapped_view)
     return wrapped_view
