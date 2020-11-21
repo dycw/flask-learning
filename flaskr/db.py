@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sqlite3
+from sqlite3 import Connection
 from typing import Any
 
 import click
@@ -10,7 +11,7 @@ from flask import g
 from flask.cli import with_appcontext
 
 
-def get_db() -> Flask:
+def get_db() -> Connection:
     if "db" not in g:
         g.db = sqlite3.connect(
             current_app.config["DATABASE"],
@@ -18,9 +19,7 @@ def get_db() -> Flask:
         )
         g.db.row_factory = sqlite3.Row
 
-    if not isinstance(out := g.db, Flask):
-        raise TypeError(out)
-    return out
+    return g.db
 
 
 def close_db(e: Any = None) -> None:  # noqa: U100

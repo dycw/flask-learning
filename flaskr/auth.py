@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 from typing import Any
+from typing import Union
 
 from flask import Blueprint
 from flask import flash
@@ -22,7 +23,7 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
 @bp.route("/register", methods=("GET", "POST"))
-def register() -> Any:
+def register() -> Union[str, Response]:
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -52,13 +53,11 @@ def register() -> Any:
 
         flash(error)
 
-    if not isinstance(out := render_template("auth/register.html"), Response):
-        raise TypeError(out)
-    return out
+    return render_template("auth/register.html")
 
 
 @bp.route("/login", methods=("GET", "POST"))
-def login() -> Any:
+def login() -> Union[str, Response]:
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -81,9 +80,7 @@ def login() -> Any:
 
         flash(error)
 
-    if not isinstance(out := render_template("auth/login.html"), Response):
-        raise TypeError(out)
-    return out
+    return render_template("auth/login.html")
 
 
 @bp.before_app_request
