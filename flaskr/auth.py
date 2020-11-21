@@ -107,13 +107,11 @@ def logout() -> Response:
     return redirect(url_for("index"))
 
 
-def login_required(view: Callable[..., str]) -> Callable[..., str]:
+def login_required(view: Callable) -> Callable:
     @functools.wraps(view)
-    def wrapped_view(**kwargs: Any) -> str:
+    def wrapped_view(**kwargs: Any) -> Union[str, Response]:
         if g.user is None:
-            if not isinstance(out := redirect(url_for("auth.login")), str):
-                raise TypeError(out)
-            return out
+            return redirect(url_for("auth.login"))
 
         if not isinstance(out2 := view(**kwargs), str):
             raise TypeError(type(out2))
