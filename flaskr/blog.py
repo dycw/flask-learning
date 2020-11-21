@@ -116,11 +116,9 @@ def update(id: int) -> Union[str, Response]:  # noqa: A002
 
 @bp.route("/<int:id>/delete", methods=("POST",))
 @login_required
-def delete(id: int) -> Any:  # noqa: A002
+def delete(id: int) -> Response:  # noqa: A002
     get_post(id)
     db = get_db()
     db.execute("DELETE FROM post WHERE id = ?", (id,))
     db.commit()
-    if not isinstance(out := redirect(url_for("blog.index")), str):
-        raise TypeError(type(out))
-    return out
+    return redirect(url_for("blog.index"))
