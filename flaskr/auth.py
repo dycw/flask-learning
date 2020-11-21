@@ -113,8 +113,6 @@ def login_required(view: Callable) -> Callable:
         if g.user is None:
             return redirect(url_for("auth.login"))
 
-        if not isinstance(out2 := view(**kwargs), str):
-            raise TypeError(type(out2))
-        return out2
+        return view(**kwargs)
 
     return wrapped_view

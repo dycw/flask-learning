@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from sqlite3.dbapi2 import Row
 from typing import Any
 from typing import Union
 
@@ -65,7 +66,7 @@ def create() -> Union[str, Response]:
     return out2
 
 
-def get_post(id: int, check_author: bool = True) -> Any:  # noqa: A002
+def get_post(id: int, check_author: bool = True) -> Row:  # noqa: A002
     post = (
         get_db()
         .execute(
@@ -83,14 +84,12 @@ def get_post(id: int, check_author: bool = True) -> Any:  # noqa: A002
     if check_author and post["author_id"] != g.user["id"]:
         abort(403)
 
-    if not isinstance(post, str):
-        raise TypeError(type(post))
     return post
 
 
 @bp.route("/<int:id>/update", methods=("GET", "POST"))
 @login_required
-def update(id: int) -> Any:  # noqa: A002
+def update(id: int) -> Union[str, Response]:  # noqa: A002
     post = get_post(id)
 
     if request.method == "POST":
@@ -110,16 +109,9 @@ def update(id: int) -> Any:  # noqa: A002
                 (title, body, id),
             )
             db.commit()
-            if not isinstance(out := redirect(url_for("blog.index")), str):
-                raise TypeError(type(out))
-            return out
+            return redirect(url_for("blog.index"))
 
-    if not isinstance(
-        out2 := render_template("blog/update.html", post=post),
-        str,
-    ):
-        raise TypeError(type(out2))
-    return out2
+    return render_template("blog/update.html", post=post)
 
 
 @bp.route("/<int:id>/delete", methods=("POST",))
