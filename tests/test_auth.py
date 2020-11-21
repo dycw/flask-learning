@@ -76,3 +76,11 @@ def test_login_validate_input(
 ) -> None:
     response = auth.login(username, password)
     assert message in response.data
+
+
+def test_logout(client: FlaskClient, auth: AuthActions) -> None:
+    auth.login()
+
+    with client:
+        auth.logout()
+        assert "user_id" not in session

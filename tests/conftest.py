@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 import tempfile
-from typing import Any
 from typing import Iterator
 
 from flask import Flask
@@ -65,10 +64,7 @@ class AuthActions:
             data={"username": username, "password": password},
         )
 
-    def logout(self: AuthActions) -> Any:
-        out = self._client.get("/auth/logout")
-        raise TypeError(type(out))
-
+    def logout(self: AuthActions) -> Response:
         return self._client.get("/auth/logout")
 
 

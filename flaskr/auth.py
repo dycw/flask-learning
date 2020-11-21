@@ -102,11 +102,9 @@ def load_logged_in_user() -> None:
 
 
 @bp.route("/logout")
-def logout() -> Any:
+def logout() -> Response:
     session.clear()
-    if not isinstance(out := redirect(url_for("index")), str):
-        raise TypeError(out)
-    return out
+    return redirect(url_for("index"))
 
 
 def login_required(view: Callable[..., str]) -> Callable[..., str]:
