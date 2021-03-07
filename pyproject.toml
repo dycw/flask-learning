@@ -1,12 +1,55 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
 [tool.black]
 line-length = 80
+skip-magic-trailing-comma = true
 target-version = ["py38"]
 
-[tool.nitpick]
-style = "https://raw.githubusercontent.com/dycw/nitpick/master/nitpick-style.toml"
+
+[tool.isort]
+atomic = true
+float_to_top = true
+force_single_line = true
+line_length = 80
+lines_after_imports = 2
+profile = "black"
+remove_redundant_aliases = true
+skip_gitignore = true
+src_paths = ["src"]
+virtual_env = ".venv/bin/python"
+
+
+[tool.poetry]
+name = "flask-learning"
+version = "0.0.0"
+description = "Messing around in Flask"
+authors = ["Derek Wan <d.wan@icloud.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+flask = "^1.1"
+loguru = "^0.5"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2"
+pytest = "^6"
+pytest-xdist = "^2"
+
 
 [tool.pytest.ini_options]
-addopts = "-rsxX -v --color=yes --cov-config=setup.cfg --cov-report=html --durations=5"
-looponfailroots = "flaskr/ tests/"
-minversion = "6.0"
-testpaths = "tests"
+addopts = ["-q", "-rsxX", "--color=yes", "--strict-markers"]
+minversion = 6.0
+looponfailroots = ["src"]
+testpaths = ["src/tests"]
+xfail_strict = true
+
+log_level = "WARNING"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+log_cli_format = """\
+  [%(asctime)s.%(msecs)03d] [%(levelno)d] [%(name)s:%(funcName)s] \
+  [%(process)d]\n%(msg)s"""
+log_cli_level = "WARNING"
