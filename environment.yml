@@ -1,7 +1,0 @@
-name: flask-learning
-
-dependencies:
-  - python = 3.8.*
-  - pip
-  - pip:
-      - --requirement=requirements/dev.txt
