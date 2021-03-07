@@ -3,6 +3,7 @@ from random import SystemRandom
 from flask import render_template
 
 from flask_learning.app import app
+from flask_learning.app.forms import LoginForm
 
 
 RANDOM = SystemRandom()
@@ -21,3 +22,9 @@ def index() -> str:
         },
     ]
     return render_template("index.html", title=title, user=user, posts=posts)
+
+
+@app.route("/login")
+def login() -> str:
+    form = LoginForm()
+    return render_template("login.html", title="Sign In", form=form)
