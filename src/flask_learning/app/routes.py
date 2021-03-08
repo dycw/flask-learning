@@ -1,6 +1,10 @@
 from random import SystemRandom
+from typing import Union
 
+from flask import flash
+from flask import redirect
 from flask import render_template
+from werkzeug.wrappers import Response
 
 from flask_learning.app import app
 from flask_learning.app.forms import LoginForm
@@ -24,7 +28,14 @@ def index() -> str:
     return render_template("index.html", title=title, user=user, posts=posts)
 
 
-@app.route("/login")
-def login() -> str:
+@app.route("/login", methods=["GET", "POST"])
+def login() -> Union[str, Response]:
     form = LoginForm()
-    return render_template("login.html", title="Sign In", form=form)
+    if form.validate_on_submit():
+        flash(
+            f"Login requested for user {form.username.name}, ",
+            f"remember_me={form.remember_me.data}",
+        )
+        return redirect("/index")
+    else:
+        return render_template("login.html", title="Sign In", form=form)
