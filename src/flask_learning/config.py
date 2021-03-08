@@ -2,7 +2,7 @@ from os import environ
 from pathlib import Path
 
 
-PATH_DB = Path(__file__).absolute().joinpath("app.db")
+PATH_DB = Path(__file__).absolute().parent.joinpath("app.db")
 
 
 class Config:
