@@ -33,8 +33,8 @@ def login() -> Union[str, Response]:
     form = LoginForm()
     if form.validate_on_submit():
         flash(
-            f"Login requested for user {form.username.name}, ",
-            f"remember_me={form.remember_me.data}",
+            f"Login requested for user {form.username.data}, "
+            f"remember_me={form.remember_me.data}"
         )
         return redirect("/index")
     else:
