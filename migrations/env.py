@@ -1,4 +1,3 @@
-# flake8: noqa
 import logging
 from logging.config import fileConfig
 
