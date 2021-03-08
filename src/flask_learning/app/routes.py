@@ -4,6 +4,7 @@ from typing import Union
 from flask import flash
 from flask import redirect
 from flask import render_template
+from flask import url_for
 from werkzeug import Response
 
 from flask_learning.app import app
@@ -36,6 +37,6 @@ def login() -> Union[str, Response]:
             f"Login requested for user {form.username.data}, "
             f"remember_me={form.remember_me.data}"
         )
-        return redirect("/index")
+        return redirect(url_for("index"))
     else:
         return render_template("login.html", title="Sign In", form=form)
