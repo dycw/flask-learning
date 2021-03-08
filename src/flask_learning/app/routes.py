@@ -4,7 +4,7 @@ from typing import Union
 from flask import flash
 from flask import redirect
 from flask import render_template
-from werkzeug.wrappers import Response
+from werkzeug import Response
 
 from flask_learning.app import app
 from flask_learning.app.forms import LoginForm
