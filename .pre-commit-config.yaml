@@ -29,7 +29,6 @@ repos:
           - flake8-executable
           - flake8-fine-pytest
           - flake8-fixme
-          - flake8-future-import
           - flake8-implicit-str-concat
           - flake8-mutable
           - flake8-print
@@ -53,7 +52,7 @@ repos:
     hooks:
       - id: prettier
   - repo: https://github.com/dycw/pre-commit-hooks
-    rev: 0.2.10
+    rev: 0.2.11
     hooks:
       - id: check-settings
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -95,7 +94,6 @@ repos:
           - flake8-executable
           - flake8-fine-pytest
           - flake8-fixme
-          - flake8-future-import
           - flake8-implicit-str-concat
           - flake8-mutable
           - flake8-print
