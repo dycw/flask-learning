@@ -1,6 +1,7 @@
 import datetime as dt
 from typing import cast
 
+from flask_login import UserMixin
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
@@ -12,6 +13,7 @@ from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
 from flask_learning.app import db
+from flask_learning.app import login
 
 
 DbModel = cast(type[Table], db.Model)  # type: ignore
@@ -23,7 +25,7 @@ DbForeignKey = cast(type[ForeignKey], db.ForeignKey)  # type: ignore
 DbRelationship = cast(type[relationship], db.relationship)  # type: ignore
 
 
-class User(DbModel):
+class User(UserMixin, DbModel):
     id = DbColumn(DbInteger, primary_key=True)
     username = DbColumn(DbString(64), index=True, unique=True)
     email = DbColumn(DbString(120), index=True, unique=True)
@@ -38,6 +40,11 @@ class User(DbModel):
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
+
+
+@login.user_loader
+def load_user(id: str) -> "User":  # noqa: A002
+    return User.query.get(int(id))
 
 
 class Post(DbModel):

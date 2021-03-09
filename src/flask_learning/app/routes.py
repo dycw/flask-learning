@@ -5,10 +5,13 @@ from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import url_for
+from flask_login import current_user
+from flask_login import login_user
 from werkzeug import Response
 
 from flask_learning.app import app
 from flask_learning.app.forms import LoginForm
+from flask_learning.app.models import User
 
 
 RANDOM = SystemRandom()
@@ -31,12 +34,17 @@ def index() -> str:
 
 @app.route("/login", methods=["GET", "POST"])
 def login() -> Union[str, Response]:
-    form = LoginForm()
-    if form.validate_on_submit():
-        flash(
-            f"Login requested for user {form.username.data}, "
-            f"remember_me={form.remember_me.data}"
-        )
+    if current_user.is_authenticated:
         return redirect(url_for("index"))
     else:
-        return render_template("login.html", title="Sign In", form=form)
+        form = LoginForm()
+        if form.validate_on_submit():
+            user = User.query.filter_by(username=form.username.data).first()
+            if user is None or not user.check_password(form.password.data):
+                flash("Invalid username or password")
+                return redirect(url_for("login"))
+            else:
+                login_user(user, remember=form.remember_me.data)
+                return redirect(url_for("index"))
+        else:
+            return render_template("login.html", title="Sign In", form=form)
