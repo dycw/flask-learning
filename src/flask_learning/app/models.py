@@ -8,8 +8,8 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.ext.declarative.api import Table
 from sqlalchemy.orm import relationship
-from werkzeug import check_password_hash
-from werkzeug import generate_password_hash
+from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash
 
 from flask_learning.app import db
 
