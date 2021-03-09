@@ -1,6 +1,5 @@
 {
   "include": ["src"],
-  "ignore": ["src/flask_learning/app/models.py"],
   "venvPath": ".venv",
   "executionEnvironments": [{ "root": "src" }]
 }
