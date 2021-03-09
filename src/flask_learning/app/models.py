@@ -8,6 +8,8 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.ext.declarative.api import Table
 from sqlalchemy.orm import relationship
+from werkzeug import check_password_hash
+from werkzeug import generate_password_hash
 
 from flask_learning.app import db
 
@@ -30,6 +32,12 @@ class User(DbModel):
 
     def __repr__(self) -> str:
         return f"<User {self.username}>"
+
+    def set_password(self, password: str) -> None:
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password: str) -> bool:
+        return check_password_hash(self.password_hash, password)
 
 
 class Post(DbModel):
