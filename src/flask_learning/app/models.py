@@ -15,7 +15,7 @@ DbColumn = cast(type[Column], db.Column)  # type: ignore
 DbDateTime = cast(type[DateTime], db.DateTime)  # type: ignore
 DbInteger = cast(type[Integer], db.Integer)  # type: ignore
 DbString = cast(type[String], db.String)  # type: ignore
-DbForeignKey = cast(type[ForeignKey], db.relationship)  # type: ignore
+DbForeignKey = cast(type[ForeignKey], db.ForeignKey)  # type: ignore
 DbRelationship = cast(type[relationship], db.relationship)  # type: ignore
 
 
