@@ -16,7 +16,9 @@ from werkzeug import Response
 from werkzeug.urls import url_parse
 
 from flask_learning.app import app
+from flask_learning.app import db
 from flask_learning.app.forms import LoginForm
+from flask_learning.app.forms import RegistrationForm
 from flask_learning.app.models import User
 
 
@@ -65,3 +67,17 @@ def login() -> Union[Response, str]:
 def logout() -> Response:
     logout_user()
     return redirect(url_for("index"))
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register() -> Union[Response, str]:
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    if not (form := RegistrationForm()).validate_on_submit():
+        return render_template("register.html", title="Register", form=form)
+    user = User(username=form.username.data, email=form.email.data)
+    user.set_password(form.password.data)
+    db.session.add(user)
+    db.session.commit()
+    flash("Congratulations, you are now a registered user!")
+    return redirect(url_for("login"))
