@@ -1,4 +1,5 @@
 import datetime as dt
+from hashlib import md5
 from typing import cast
 
 from flask_login import UserMixin
@@ -40,6 +41,14 @@ class User(UserMixin, DbModel):
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
+
+    def avatar(self, size: int) -> str:
+        digest = md5(  # noqa: S303
+            self.email.lower().encode("utf-8")
+        ).hexdigest()
+        return "https://www.gravatar.com/avatar/{}?d=identicon&s={}".format(
+            digest, size
+        )
 
 
 @login.user_loader
