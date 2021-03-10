@@ -12,6 +12,7 @@ from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
+from sqlalchemy.orm.session import Session
 from werkzeug import Response
 from werkzeug.urls import url_parse
 
@@ -77,7 +78,8 @@ def register() -> Union[Response, str]:
         return render_template("register.html", title="Register", form=form)
     user = User(username=form.username.data, email=form.email.data)
     user.set_password(form.password.data)
-    db.session.add(user)
-    db.session.commit()
+    session = cast(Session, db.session)
+    session.add(user)
+    session.commit()
     flash("Congratulations, you are now a registered user!")
     return redirect(url_for("login"))
