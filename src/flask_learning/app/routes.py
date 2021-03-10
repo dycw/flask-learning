@@ -26,7 +26,6 @@ RANDOM = SystemRandom()
 @login_required
 def index() -> str:
     title = "Home" if RANDOM.uniform(0.0, 1.0) <= 0.5 else None
-    user = {"username": "Derek"}
     posts = [
         {"author": {"username": "John"}, "body": "Beautiful day in Portland!"},
         {
@@ -34,7 +33,7 @@ def index() -> str:
             "body": "The Avengers movie was so cool!",
         },
     ]
-    return render_template("index.html", title=title, user=user, posts=posts)
+    return render_template("index.html", title=title, posts=posts)
 
 
 @app.route("/login", methods=["GET", "POST"])
