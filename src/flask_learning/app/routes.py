@@ -1,5 +1,7 @@
 from random import SystemRandom
+from typing import Optional
 from typing import Union
+from typing import cast
 
 from flask import flash
 from flask import redirect
@@ -42,19 +44,21 @@ def login() -> Union[Response, str]:
         return redirect(url_for("index"))
     if not (form := LoginForm()).validate_on_submit():
         return render_template("login.html", title="Sign In", form=form)
-    if (
-        user := User.query.filter_by(username=form.username.data).first()
-    ) is None or not user.check_password_hash(form.password.data):
+    user = cast(
+        Optional[User],
+        User.query.filter_by(username=form.username.data).first(),
+    )
+    if (user is None) or not user.check_password(form.password.data):
         flash("Invalid username or password")
         return redirect(url_for("login"))
     login_user(user, remember=form.remember_me.data)
-    if (
-        not (next_page := request.args.get("next"))
-        or url_parse(next_page).netloc != ""
-    ):
-        return redirect(url_for("index"))
-    else:
-        return redirect(url_for(next_page))
+    next_page = request.args.get("next")
+    location = (
+        url_for("index")
+        if not next_page or url_parse(next_page).netloc != ""
+        else next_page
+    )
+    return redirect(location)
 
 
 @app.route("/logout")
