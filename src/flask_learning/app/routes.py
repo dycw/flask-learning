@@ -13,12 +13,11 @@ from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
-from sqlalchemy.orm.session import Session
 from werkzeug import Response
 from werkzeug.urls import url_parse
 
 from flask_learning.app import app
-from flask_learning.app import db
+from flask_learning.app import db_session
 from flask_learning.app.forms import EditProfileForm
 from flask_learning.app.forms import LoginForm
 from flask_learning.app.forms import RegistrationForm
@@ -26,7 +25,6 @@ from flask_learning.app.models import User
 
 
 RANDOM = SystemRandom()
-db_session = cast(Session, db.session)
 
 
 @app.route("/")
