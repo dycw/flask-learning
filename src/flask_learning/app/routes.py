@@ -1,3 +1,4 @@
+import datetime as dt
 from random import SystemRandom
 from typing import Optional
 from typing import Union
@@ -24,6 +25,7 @@ from flask_learning.app.models import User
 
 
 RANDOM = SystemRandom()
+db_session = cast(Session, db.session)
 
 
 @app.route("/")
@@ -78,9 +80,8 @@ def register() -> Union[Response, str]:
         return render_template("register.html", title="Register", form=form)
     user = User(username=form.username.data, email=form.email.data)
     user.set_password(form.password.data)
-    session = cast(Session, db.session)
-    session.add(user)
-    session.commit()
+    db_session.add(user)
+    db_session.commit()
     flash("Congratulations, you are now a registered user!")
     return redirect(url_for("login"))
 
@@ -94,3 +95,10 @@ def user(username: str) -> str:
         {"author": user, "body": "Test post #2"},
     ]
     return render_template("user.html", user=user, posts=posts)
+
+
+@app.before_request
+def before_request() -> None:
+    if current_user.is_authenticated:
+        current_user.last_seen = dt.datetime.utcnow()
+        db_session.commit()
