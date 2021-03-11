@@ -32,6 +32,8 @@ class User(UserMixin, DbModel):
     email = DbColumn(DbString(120), index=True, unique=True)
     password_hash = DbColumn(DbString(128))
     posts = DbRelationship("Post", backref="author")
+    about_me = DbColumn(DbString(140))
+    last_seen = DbColumn(DbDateTime, default=dt.datetime.utcnow)
 
     def __repr__(self) -> str:
         return f"<User {self.username}>"
