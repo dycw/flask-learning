@@ -455,7 +455,7 @@ pymysql = ["pymysql (<1)", "pymysql"]
 
 [[package]]
 name = "ssl-smtp-handler"
-version = "1.0.1"
+version = "1.0.3"
 description = "A standard library compatible logging handler which sends mail via SMTP_SSL"
 category = "main"
 optional = false
@@ -529,7 +529,7 @@ locale = ["Babel (>=1.3)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "65dce52b683c099e32e401845ec310ebb1af24ca5aca331f21030160f577d15d"
+content-hash = "224980834bba8a341110a4a23a441ed00163defbee809028151db5b537639f86"
 
 [metadata.files]
 alembic = [
@@ -801,8 +801,8 @@ sqlalchemy = [
     {file = "SQLAlchemy-1.3.23.tar.gz", hash = "sha256:6fca33672578666f657c131552c4ef8979c1606e494f78cd5199742dfb26918b"},
 ]
 ssl-smtp-handler = [
-    {file = "ssl-smtp-handler-1.0.1.tar.gz", hash = "sha256:b064224c13d553c76716a3b4d36d4caba43830ffe0ea0b00f98a25a9d73e409d"},
-    {file = "ssl_smtp_handler-1.0.1-py3-none-any.whl", hash = "sha256:0ab217abe003efba4bdfb9c5e7b4087005de6b1619bdcaefef1e1aa1614df6d2"},
+    {file = "ssl-smtp-handler-1.0.3.tar.gz", hash = "sha256:0633f97dd8b24bc5888491b8d99c129936d5d34e7fe550586415c2b09e6eff0c"},
+    {file = "ssl_smtp_handler-1.0.3-py3-none-any.whl", hash = "sha256:d4745d331256fd7049cd48381561a062c163a145c58a3cb7b70ad7cdd8051e3c"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},

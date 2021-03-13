@@ -1,4 +1,8 @@
 from logging import ERROR
+from logging import INFO
+from logging import Formatter
+from logging.handlers import RotatingFileHandler
+from pathlib import Path
 from typing import cast
 
 from flask import Flask
@@ -25,14 +29,32 @@ from flask_learning.app import models  # noqa: E402, F401
 from flask_learning.app import routes  # noqa: E402, F401
 
 
-if not app.debug and (mail_host := app.config["MAIL_HOST"]):
-    mail_username = app.config["MAIL_USERNAME"]
-    handler = SSLSMTPHandler(
-        mailhost=mail_host,
-        fromaddr=mail_username,
-        toaddrs=[app.config["MAIL_TO_ADDRESS"]],
-        subject="Microblog failure",
-        credentials=(mail_username, app.config["MAIL_PASSWORD"]),
+if not app.debug:
+    app.logger.setLevel(INFO)
+
+    if mail_host := app.config["MAIL_HOST"]:
+        mail_username = app.config["MAIL_USERNAME"]
+        smtp_handler = SSLSMTPHandler(
+            mailhost=mail_host,
+            fromaddr=mail_username,
+            toaddrs=[app.config["MAIL_TO_ADDRESS"]],
+            subject="Microblog failure",
+            credentials=(mail_username, app.config["MAIL_PASSWORD"]),
+        )
+        smtp_handler.setLevel(ERROR)
+        app.logger.addHandler(smtp_handler)
+
+    logs = Path("logs")
+    logs.mkdir(parents=True, exist_ok=True)
+    file_handler = RotatingFileHandler(
+        logs.joinpath("microblog.log"), maxBytes=10240, backupCount=1
     )
-    handler.setLevel(ERROR)
-    app.logger.addHandler(handler)
+    file_handler.setFormatter(
+        Formatter(
+            "%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]"
+        )
+    )
+    file_handler.setLevel(INFO)
+    app.logger.addHandler(file_handler)
+
+    app.logger.info("Microblog startup")
