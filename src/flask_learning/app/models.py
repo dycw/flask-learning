@@ -9,6 +9,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.ext.declarative.api import Table
+from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
@@ -18,12 +19,21 @@ from flask_learning.app import login
 
 
 DbModel = cast(type[Table], db.Model)  # type: ignore
+DbTable = cast(type[Table], db.Table)  # type: ignore
 DbColumn = cast(type[Column], db.Column)  # type: ignore
 DbDateTime = cast(type[DateTime], db.DateTime)  # type: ignore
 DbInteger = cast(type[Integer], db.Integer)  # type: ignore
 DbString = cast(type[String], db.String)  # type: ignore
 DbForeignKey = cast(type[ForeignKey], db.ForeignKey)  # type: ignore
 DbRelationship = cast(type[relationship], db.relationship)  # type: ignore
+DbBackref = cast(type[backref], db.backref)  # type: ignore
+
+
+followers = DbTable(
+    "followers",
+    DbColumn("follower_id", DbInteger, DbForeignKey("user.id")),
+    DbColumn("followed_id", DbInteger, DbForeignKey("user.id")),
+)
 
 
 class User(UserMixin, DbModel):
@@ -34,6 +44,14 @@ class User(UserMixin, DbModel):
     posts = DbRelationship("Post", backref="author")
     about_me = DbColumn(DbString(140))
     last_seen = DbColumn(DbDateTime, default=dt.datetime.utcnow)
+    followed = DbRelationship(
+        "User",
+        secondary=followers,
+        primaryjoin=followers.c.follower_id == id,
+        secondaryjoin=followers.c.followed_id == id,
+        backref=DbBackref("followers", lazy="dynamic"),
+        lazy="dynamic",
+    )
 
     def __repr__(self) -> str:
         return f"<User {self.username}>"
