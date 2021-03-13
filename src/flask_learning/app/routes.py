@@ -106,7 +106,7 @@ def before_request() -> None:
 @app.route("/edit_profile", methods=["GET", "POST"])
 @login_required
 def edit_profile() -> Union[Response, str]:
-    if (form := EditProfileForm()).validate_on_submit():
+    if (form := EditProfileForm(current_user.username)).validate_on_submit():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
         db_session.commit()
