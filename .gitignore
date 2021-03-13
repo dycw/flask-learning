@@ -1,6 +1,9 @@
 # editor
 .vim/
 
+# project
+logs/
+
 # Python
 .cache/
 __pycache__/
