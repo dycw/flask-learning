@@ -85,6 +85,13 @@ class User(UserMixin, DbModel):
             self.followed.filter(followers.c.followed_id == user.id).count() > 0
         )
 
+    def followed_posts(self) -> list[Post]:
+        return (
+            Post.query.join(followers, followers.c.followed_id == Post.user_id)
+            .filter(followers.c.follower_id == self.id)
+            .order_by(Post.timestamp.desc())
+        )
+
 
 @login.user_loader
 def load_user(id: str) -> "User":  # noqa: A002
