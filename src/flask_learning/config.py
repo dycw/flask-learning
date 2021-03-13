@@ -11,3 +11,7 @@ class Config:
         environ.get("DATABASE_URL") or f"sqlite:///{PATH_DB}"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    MAIL_HOST = environ.get("MAIL_HOST")
+    MAIL_USERNAME = environ.get("MAIL_USERNAME")
+    MAIL_PASSWORD = environ.get("MAIL_PASSWORD")
+    MAIL_TO_ADDRESS = environ.get("MAIL_TO_ADDRESS")
