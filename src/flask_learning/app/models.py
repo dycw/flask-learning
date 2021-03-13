@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime as dt
 from hashlib import md5
 from typing import cast
@@ -68,6 +70,19 @@ class User(UserMixin, DbModel):
         ).hexdigest()
         return "https://www.gravatar.com/avatar/{}?d=identicon&s={}".format(
             digest, size
+        )
+
+    def follow(self, user: User) -> None:
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self, user: User) -> None:
+        if self.is_following(user):
+            self.followed.remove(user)
+
+    def is_following(self, user: User) -> bool:
+        return (
+            self.followed.filter(followers.c.followed_id == user.id).count() > 0
         )
 
 
