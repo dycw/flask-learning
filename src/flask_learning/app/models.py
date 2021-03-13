@@ -5,6 +5,7 @@ from hashlib import md5
 from typing import cast
 
 from flask_login import UserMixin
+from flask_sqlalchemy import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
@@ -85,7 +86,7 @@ class User(UserMixin, DbModel):
             self.followed.filter(followers.c.followed_id == user.id).count() > 0
         )
 
-    def followed_posts(self) -> list[Post]:
+    def followed_posts(self) -> BaseQuery:
         followed = (
             Post.query.join(followers, followers.c.followed_id == Post.user_id)
             .filter(followers.c.follower_id == self.id)
