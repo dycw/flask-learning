@@ -19,6 +19,7 @@ from werkzeug.urls import url_parse
 from flask_learning.app import app
 from flask_learning.app import db_session
 from flask_learning.app.forms import EditProfileForm
+from flask_learning.app.forms import EmptyForm
 from flask_learning.app.forms import LoginForm
 from flask_learning.app.forms import RegistrationForm
 from flask_learning.app.models import User
@@ -116,3 +117,37 @@ def edit_profile() -> Union[Response, str]:
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
     return render_template("edit_profile.html", title="Edit Profile", form=form)
+
+
+@app.route("/follow/<username>", methods=["POST"])
+@login_required
+def follow(username: str) -> Union[Response, str]:
+    if not EmptyForm().validate_on_submit():
+        return redirect(url_for("index"))
+    if (user := User.query.filter_by(username=username).first()) is None:
+        flash(f"User {username} not found.")
+        return redirect(url_for("index"))
+    if user == current_user:
+        flash("You cannot follow yourself!")
+        return redirect(url_for("user", username=username))
+    current_user.follow(user)
+    db_session.commit()
+    flash(f"You are following {username}!")
+    return redirect(url_for("user", username=username))
+
+
+@app.route("/unfollow/<username>", methods=["POST"])
+@login_required
+def unfollow(username: str) -> Union[Response, str]:
+    if not EmptyForm().validate_on_submit():
+        return redirect(url_for("index"))
+    if (user := User.query.filter_by(username=username).first()) is None:
+        flash(f"User {username} not found.")
+        return redirect(url_for("index"))
+    if user == current_user:
+        flash("You cannot unfollow yourself!")
+        return redirect(url_for("user", username=username))
+    current_user.unfollow(user)
+    db_session.commit()
+    flash(f"You are not following {username}.")
+    return redirect(url_for("user", username=username))
