@@ -35,16 +35,7 @@ RANDOM = SystemRandom()
 @login_required
 def index() -> Union[Response, str]:
     if not (form := PostForm()).validate_on_submit():
-        posts = [
-            {
-                "author": {"username": "John"},
-                "body": "Beautiful day in Portland!",
-            },
-            {
-                "author": {"username": "Susan"},
-                "body": "The Avengers movie was so cool!",
-            },
-        ]
+        posts = current_user.followed_posts().all()
         return render_template(
             "index.html", title="Home Page", form=form, posts=posts
         )

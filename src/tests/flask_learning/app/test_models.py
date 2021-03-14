@@ -3,7 +3,6 @@ from typing import Iterator
 from typing import cast
 
 from pytest import fixture
-from pytest import mark
 from sqlalchemy.orm.session import Session
 
 from flask_learning.app import app
@@ -56,10 +55,6 @@ class TestUser:
         assert user1.followed.count() == 0
         assert user2.followers.count() == 0
 
-    @mark.xfail(
-        until=dt.date(2021, 4, 13),
-        reason='says there is a syntax error with "union"',
-    )
     def test_follow_posts(self, session: Session) -> None:
         # create four users
         user1 = User(username="john", email="john@example.com")
