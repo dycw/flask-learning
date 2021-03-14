@@ -21,26 +21,38 @@ from flask_learning.app import db_session
 from flask_learning.app.forms import EditProfileForm
 from flask_learning.app.forms import EmptyForm
 from flask_learning.app.forms import LoginForm
+from flask_learning.app.forms import PostForm
 from flask_learning.app.forms import RegistrationForm
+from flask_learning.app.models import Post
 from flask_learning.app.models import User
 
 
 RANDOM = SystemRandom()
 
 
-@app.route("/")
-@app.route("/index")
+@app.route("/", methods=["GET", "POST"])
+@app.route("/index", methods=["GET", "POST"])
 @login_required
-def index() -> str:
-    title = "Home" if RANDOM.uniform(0.0, 1.0) <= 0.5 else None
-    posts = [
-        {"author": {"username": "John"}, "body": "Beautiful day in Portland!"},
-        {
-            "author": {"username": "Susan"},
-            "body": "The Avengers movie was so cool!",
-        },
-    ]
-    return render_template("index.html", title=title, posts=posts)
+def index() -> Union[Response, str]:
+    if not (form := PostForm()).validate_on_submit():
+        posts = [
+            {
+                "author": {"username": "John"},
+                "body": "Beautiful day in Portland!",
+            },
+            {
+                "author": {"username": "Susan"},
+                "body": "The Avengers movie was so cool!",
+            },
+        ]
+        return render_template(
+            "index.html", title="Home Page", form=form, posts=posts
+        )
+    post = Post(body=form.post.data, author=current_user)
+    db_session.add(post)
+    db_session.commit()
+    flash("Your post is now live!")
+    return redirect(url_for("index"))
 
 
 @app.route("/login", methods=["GET", "POST"])
