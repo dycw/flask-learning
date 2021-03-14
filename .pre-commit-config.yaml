@@ -51,6 +51,7 @@ repos:
     rev: v2.2.1
     hooks:
       - id: prettier
+        exclude: user.html
   - repo: https://github.com/dycw/pre-commit-hooks
     rev: 0.2.15
     hooks:
