@@ -95,7 +95,7 @@ class User(UserMixin, DbModel):
 
 
 @login.user_loader
-def load_user(id: str) -> "User":  # noqa: A002
+def load_user(id: str) -> User:  # noqa: A002
     return User.query.get(int(id))
 
 
