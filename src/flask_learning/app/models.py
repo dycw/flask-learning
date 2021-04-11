@@ -44,7 +44,7 @@ class User(UserMixin, DbModel):
     username = DbColumn(DbString(64), index=True, unique=True)
     email = DbColumn(DbString(120), index=True, unique=True)
     password_hash = DbColumn(DbString(128))
-    posts = DbRelationship("Post", backref="author")
+    posts = DbRelationship("Post", backref="author", lazy="dynamic")
     about_me = DbColumn(DbString(140))
     last_seen = DbColumn(DbDateTime, default=dt.datetime.utcnow)
     followed = DbRelationship(
