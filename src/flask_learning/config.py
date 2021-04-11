@@ -15,4 +15,4 @@ class Config:
     MAIL_USERNAME = environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = environ.get("MAIL_PASSWORD")
     MAIL_TO_ADDRESS = environ.get("MAIL_TO_ADDRESS")
-    POSTS_PER_PAGE = 3
+    POSTS_PER_PAGE = 25
