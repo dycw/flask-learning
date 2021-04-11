@@ -11,7 +11,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
-from sqlalchemy.ext.declarative.api import Table
+from sqlalchemy import Table
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 from werkzeug.security import check_password_hash
